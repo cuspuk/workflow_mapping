@@ -78,4 +78,4 @@ threads:
   mapping__indexing: 2 # int(2): Number of threads to use for bam_index.
 
 module_versions:
-  reads: "v3.4.4" # str(v3.4.4): Version of reads module.
+  reads: "v3.4.5" # str(v3.4.5): Version of reads module.

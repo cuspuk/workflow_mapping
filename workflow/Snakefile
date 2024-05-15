@@ -8,7 +8,7 @@ include: "rules/common.smk"
 
 module reads_workflow:
     snakefile:
-        github("xsitarcik/reads", path="workflow/Snakefile", tag=config["module_versions"]["reads"])
+        github("cuspuk/workflow_reads", path="workflow/Snakefile", tag=config["module_versions"]["reads"])
     config:
         config
 
