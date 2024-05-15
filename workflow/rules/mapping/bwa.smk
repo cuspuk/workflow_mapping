@@ -10,7 +10,7 @@ rule bwa__build_index:
     log:
         "{reference_dir}/bwa_index/logs/{fasta}.log",
     wrapper:
-        "https://github.com/xsitarcik/wrappers/raw/v1.13.4/wrappers/bwa/index"
+        "https://github.com/cuspuk/workflow_wrappers/raw/v1.13.4/wrappers/bwa/index"
 
 
 rule bwa__map_reads:
@@ -26,4 +26,4 @@ rule bwa__map_reads:
     log:
         "logs/mapping/bwa/{reference}/{sample}.log",
     wrapper:
-        "https://github.com/xsitarcik/wrappers/raw/v1.13.4/wrappers/bwa/map"
+        "https://github.com/cuspuk/workflow_wrappers/raw/v1.13.4/wrappers/bwa/map"

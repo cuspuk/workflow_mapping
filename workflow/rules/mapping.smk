@@ -6,7 +6,7 @@ rule samtools__index_reference:
     log:
         "{reference_dir}/logs/samtools__prepare_fai_index/{reference}.log",
     wrapper:
-        "https://github.com/xsitarcik/wrappers/raw/v1.13.4/wrappers/samtools/faidx"
+        "https://github.com/cuspuk/workflow_wrappers/raw/v1.13.4/wrappers/samtools/faidx"
 
 
 rule custom__infer_read_group:
@@ -20,7 +20,7 @@ rule custom__infer_read_group:
         "logs/custom/infer_and_store_read_group/{sample}.log",
     localrule: True
     wrapper:
-        "https://github.com/xsitarcik/wrappers/raw/v1.13.4/wrappers/custom/read_group"
+        "https://github.com/cuspuk/workflow_wrappers/raw/v1.13.4/wrappers/custom/read_group"
 
 
 rule picard__prepare_dict_index:
@@ -49,7 +49,7 @@ rule samtools__bam_index:
     log:
         "logs/mapping/indexing/{reference}/mapped/{sample}.log",
     wrapper:
-        "https://github.com/xsitarcik/wrappers/raw/v1.13.4/wrappers/samtools/index"
+        "https://github.com/cuspuk/workflow_wrappers/raw/v1.13.4/wrappers/samtools/index"
 
 
 rule samtools__stats:
