@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.0.1](https://github.com/cuspuk/workflow_mapping/compare/v3.0.0...v3.0.1) (2024-05-15)
+
+
+### Bug Fixes
+
+* changes after repo transfer ([e672167](https://github.com/cuspuk/workflow_mapping/commit/e67216766139653904c7d00bb031c967a7e2197a))
+
 ## [3.0.0](https://github.com/xsitarcik/mapping/compare/v2.3.2...v3.0.0) (2024-05-10)
 
 
