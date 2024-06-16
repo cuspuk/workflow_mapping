@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.0](https://github.com/cuspuk/workflow_mapping/compare/v3.0.3...v3.1.0) (2024-06-16)
+
+
+### Features
+
+* added bwa decontamination option ([e1cac60](https://github.com/cuspuk/workflow_mapping/commit/e1cac60a55ecc6a6ef2433e6efea2333fde32c52))
+
 ## [3.0.3](https://github.com/cuspuk/workflow_mapping/compare/v3.0.2...v3.0.3) (2024-06-15)
 
 
