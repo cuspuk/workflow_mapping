@@ -139,7 +139,7 @@ definitions:
     properties:
       reads:
         type: string
-        default: "v3.4.5"
+        default: "v3.6.0"
         pattern: "v[0-9]+.[0-9]+.[0-9]+"
         description: "Version of reads module"
     title: ModuleVersions
