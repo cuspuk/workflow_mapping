@@ -40,6 +40,9 @@ wildcard_constraints:
     **get_constraints(),
 
 
+ruleorder: bwa__build_index > reads_bwa__build_index
+
+
 rule all:
     input:
         **get_outputs(),
