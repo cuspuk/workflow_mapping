@@ -1,7 +1,7 @@
 reads: # Specify the order and methods for each read processing step. If no method is specified, the step will not be performed.
   subsampling: null # null/enum: Subsampling method, if not set, subsampling will not be performed. Allowed: 'seqtk'.
   trimming: "cutadapt" # null/enum: Trimming method, if not set, trimming will not be performed. Allowed: 'cutadapt'.
-  decontamination: "bwa" # null/enum: Decontamination method, if not set, decontamination will not be performed. Allowed: 'kraken'.
+  decontamination: "kraken" # null/enum: Decontamination method, if not set, decontamination will not be performed. Allowed: 'kraken'.
   deduplication: null # null/enum: Deduplication method, if not set, deduplication will not be performed. Allowed: 'fastuniq'.
   _generate_fastqc_for: ["trimming"] # list of enum: Specify which steps to generate fastqc for. Allowed: 'original','subsampling','trimming','decontamination','deduplication'.
 
@@ -50,13 +50,14 @@ reads__trimming__cutadapt: # Relevant only if reads->trimming is set to cutadapt
 reads__decontamination__kraken:
   kraken_dir: "path_to_kraken/k2_viral_20230314" # Directory containing kraken DB files. If does not exist, will be downloaded using the dirname.
   # get KRAKEN_TAG from https://benlangmead.github.io/aws-indexes/k2
-  exclude_taxa_ids: # list of taxonomy IDs to exclude.
+  taxa_ids: # list of taxonomy IDs to exclude.
     - 9606 # Homo Sapiens
-  exclude_children: false # Whether to exclude reads classified at more specific levels than specified taxonomy ID levels.
-  exclude_ancestors: false # Whether to exclude reads classified at all taxonomy levels between root and the specified taxonomy ID levels.
+  filter_mode: "exclude"
+  filter_children: false # Whether to exclude reads classified at more specific levels than specified taxonomy ID levels.
+  filter_ancestors: false # Whether to exclude reads classified at all taxonomy levels between root and the specified taxonomy ID levels.
   save_memory: true # If true, kraken limits RAM memory usage but sacrifices speed.
   generate_krona: false # If true, krona is generated from kraken report
-  krona_dir: null # Directory where krona dataset is located or will be downloaded.
+  krona_dir: null #"path_to_krona/{TIMESTAMP}"
 
 reads__decontamination__bwa: # Relevant only if reads->decontamination is set to bwa.
   references: # list of min 1 str: List of reference fasta files.
