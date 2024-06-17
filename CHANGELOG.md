@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1](https://github.com/cuspuk/workflow_mapping/compare/v3.1.0...v3.1.1) (2024-06-17)
+
+
+### Bug Fixes
+
+* solved rule conflict for decontamination and mapping ([c1786ae](https://github.com/cuspuk/workflow_mapping/commit/c1786ae6a720716a5a27a073426eb9be569faebf))
+
 ## [3.1.0](https://github.com/cuspuk/workflow_mapping/compare/v3.0.3...v3.1.0) (2024-06-16)
 
 
