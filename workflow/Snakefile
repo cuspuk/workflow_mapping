@@ -40,7 +40,9 @@ wildcard_constraints:
     **get_constraints(),
 
 
-ruleorder: bwa__build_index > reads_bwa__build_index
+if config["reads"]["decontamination"] == "bwa" and config["mapping"]["mapping"] == "bwa":
+
+    ruleorder: bwa__build_index > reads_bwa__build_index
 
 
 rule all:
