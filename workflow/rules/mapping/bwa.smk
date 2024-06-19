@@ -7,6 +7,8 @@ rule bwa__build_index:
     params:
         prefix=lambda wildcards, output: os.path.splitext(output.idx[0])[0],
         approach="bwtsw",
+    wildcard_constraints:
+        fasta="|".join(get_reference_names()),
     log:
         "{reference_dir}/bwa_index/logs/{fasta}.log",
     wrapper:
