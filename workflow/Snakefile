@@ -13,13 +13,7 @@ module reads_workflow:
         config
 
 
-if config["reads"]["decontamination"] == "bwa" and config["mapping"]["mapping"] == "bwa":
-
-    use rule * from reads_workflow exclude bwa__build_index as reads_*
-
-else:
-
-    use rule * from reads_workflow as reads_*
+use rule * from reads_workflow as reads_*
 
 
 # Only include standalone rules if the module is used standalone, i.e. not as a part of a larger workflow

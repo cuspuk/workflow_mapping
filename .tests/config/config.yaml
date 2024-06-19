@@ -86,4 +86,4 @@ threads:
   mapping__indexing: 2
 
 module_versions:
-  reads: "v3.6.0"
+  reads: "v3.6.1"
