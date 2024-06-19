@@ -13,7 +13,13 @@ module reads_workflow:
         config
 
 
-use rule * from reads_workflow as reads_*
+if config["reads"]["decontamination"] == "bwa" and config["mapping"]["mapping"] == "bwa":
+
+    use rule * from reads_workflow exclude bwa__build_index as reads_*
+
+else:
+
+    use rule * from reads_workflow as reads_*
 
 
 # Only include standalone rules if the module is used standalone, i.e. not as a part of a larger workflow
@@ -38,11 +44,6 @@ if config["mapping"]["_generate_qualimap"]:
 
 wildcard_constraints:
     **get_constraints(),
-
-
-if config["reads"]["decontamination"] == "bwa" and config["mapping"]["mapping"] == "bwa":
-
-    ruleorder: bwa__build_index > reads_bwa__build_index
 
 
 rule all:

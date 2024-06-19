@@ -1,7 +1,7 @@
 reads: # Specify the order and methods for each read processing step. If no method is specified, the step will not be performed.
   subsampling: null # null/enum: Subsampling method, if not set, subsampling will not be performed. Allowed: 'seqtk'.
   trimming: "cutadapt" # null/enum: Trimming method, if not set, trimming will not be performed. Allowed: 'cutadapt'.
-  decontamination: "kraken" # null/enum: Decontamination method, if not set, decontamination will not be performed. Allowed: 'kraken'.
+  decontamination: "bwa" # null/enum: Decontamination method, if not set, decontamination will not be performed. Allowed: 'kraken'.
   deduplication: null # null/enum: Deduplication method, if not set, deduplication will not be performed. Allowed: 'fastuniq'.
   _generate_fastqc_for: ["trimming"] # list of enum: Specify which steps to generate fastqc for. Allowed: 'original','subsampling','trimming','decontamination','deduplication'.
 
