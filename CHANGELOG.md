@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.3](https://github.com/cuspuk/workflow_mapping/compare/v3.1.2...v3.1.3) (2024-06-19)
+
+
+### Bug Fixes
+
+* added wconstraints for bwa index ([44a5073](https://github.com/cuspuk/workflow_mapping/commit/44a50730aada45c4b0ebf734380c4e805ccc36e6))
+
 ## [3.1.2](https://github.com/cuspuk/workflow_mapping/compare/v3.1.1...v3.1.2) (2024-06-19)
 
 
