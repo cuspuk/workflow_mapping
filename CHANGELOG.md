@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.2](https://github.com/cuspuk/workflow_mapping/compare/v3.1.1...v3.1.2) (2024-06-19)
+
+
+### Bug Fixes
+
+* bwa rule not imported again ([05df9ba](https://github.com/cuspuk/workflow_mapping/commit/05df9ba86affee2366b946004e6301b28f423aea))
+
 ## [3.1.1](https://github.com/cuspuk/workflow_mapping/compare/v3.1.0...v3.1.1) (2024-06-17)
 
 
