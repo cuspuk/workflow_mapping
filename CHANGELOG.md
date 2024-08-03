@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.8](https://github.com/cuspuk/workflow_mapping/compare/v3.1.7...v3.1.8) (2024-08-03)
+
+
+### Performance Improvements
+
+* autobump conda envs and/or wrappers ([0f90f03](https://github.com/cuspuk/workflow_mapping/commit/0f90f033e7b53c9430a335fa53cb593065549c22))
+
 ## [3.1.7](https://github.com/cuspuk/workflow_mapping/compare/v3.1.6...v3.1.7) (2024-07-23)
 
 
