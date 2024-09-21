@@ -35,7 +35,7 @@ rule picard__prepare_dict_index:
     resources:
         mem_mb=get_mem_mb_for_deduplication,
     wrapper:
-        "v4.3.0/bio/picard/createsequencedictionary"
+        "v4.5.0/bio/picard/createsequencedictionary"
 
 
 rule samtools__bam_index:
@@ -73,4 +73,4 @@ rule samtools__stats:
     log:
         "logs/mapping/samtools_stats/{reference}/{sample}_{bam_step}.log",
     wrapper:
-        "v4.3.0/bio/samtools/stats"
+        "v4.5.0/bio/samtools/stats"
