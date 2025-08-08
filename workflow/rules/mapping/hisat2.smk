@@ -1,6 +1,6 @@
 rule hisat2_indexL:
     input:
-        "{reference_dir}/{fasta}.fa",
+        fasta="{reference_dir}/{fasta}.fa",
     output:
         protected(
             multiext(
