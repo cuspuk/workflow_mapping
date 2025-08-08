@@ -43,15 +43,7 @@ jobs:
           directory: .tests
           snakefile: workflow/Snakefile
           stagein: "conda config --set channel_priority flexible"
-          args: "--configfile config/config_hisat2.yaml --use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache"
-          show-disk-usage-on-error: true
-
-      - name: Test report
-        uses: cuspuk/workflow_snakemake_action@v1.25.1
-        with:
-          directory: .tests
-          snakefile: workflow/Snakefile
-          args: "--configfile config/config_hisat2.yaml --report report.zip"
+          args: "--configfile .tests/config/config_hisat2.yaml --use-conda --show-failed-logs --cores 2 --conda-cleanup-pkgs cache"
           show-disk-usage-on-error: true
 
       - name: Test workflow
