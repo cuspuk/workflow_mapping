@@ -66,6 +66,7 @@ definitions:
         type: string
         enum:
           - "bwa"
+          - "hisat2"
         description: "Mapping tool to use."
         default: "bwa"
       reference_fasta_paths:

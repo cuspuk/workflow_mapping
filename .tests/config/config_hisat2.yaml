@@ -1,0 +1,89 @@
+reads: # Specify the order and methods for each read processing step. If no method is specified, the step will not be performed.
+  subsampling: null # null/enum: Subsampling method, if not set, subsampling will not be performed. Allowed: 'seqtk'.
+  trimming: "cutadapt" # null/enum: Trimming method, if not set, trimming will not be performed. Allowed: 'cutadapt'.
+  decontamination: "bwa" # null/enum: Decontamination method, if not set, decontamination will not be performed. Allowed: 'kraken'.
+  deduplication: null # null/enum: Deduplication method, if not set, deduplication will not be performed. Allowed: 'fastuniq'.
+  _generate_fastqc_for: ["trimming"] # list of enum: Specify which steps to generate fastqc for. Allowed: 'original','subsampling','trimming','decontamination','deduplication'.
+
+mapping:
+  mapping: "hisat2" # Specify method for mapping. Allowed: "bwa".
+  reference_fasta_paths: ["test_data/reference/sars_cov_2/sars_cov_2.fa"] # specify list of reference dirs to map against. Each dir must contain a fasta file names as the basename dir.
+  deduplication: "picard" # OPT - specify method for mapping deduplication. Allowed: "picard", null.
+  _generate_qualimap: true
+
+### HYPERPARAMETERS #############################
+
+reads__subsampling__seqtk:
+  seed: 1
+  n_reads: 1
+  reduce_memory: true
+
+reads__trimming__cutadapt: # Relevant only if reads->trimming is set to cutadapt.
+  cut_from_start_r1: null # null/int: Removes a specified number of bases from the beginning of the R1 read.
+  cut_from_start_r2: null # null/int: Removes a specified number of bases from the beginning of the R2 read.
+  cut_from_end_r1: null # null/int: Removes a specified number of bases from the end of the R1 read.
+  cut_from_end_r2: null # null/int: Removes a specified number of bases from the end of the R2 read.
+  quality_cutoff_from_3_end_r1: 20 # int(20): Removes lower quality bases from the 3' end of the R1 read.
+  quality_cutoff_from_5_end_r1: 20 # int(20): Removes lower quality bases from the 5' end of the R1 read.
+  quality_cutoff_from_3_end_r2: 20 # int(20): Removes lower quality bases from the 3' end of the R2 read.
+  quality_cutoff_from_5_end_r2: 20 # int(20): Removes lower quality bases from the 5' end of the R2 read.
+  nextseq_trimming_mode: false # bool(false): Modify quality-trimming algorithm to expect two-color chemistry data (NextSeq).
+  do_adapter_removal: false # bool(false): Whether to do adapter removal or not.
+  adapter_removal: # Relevant only if do_adapter_removal is set to true.
+    action: "trim" # enum(trim): Defines an action to perform with the found adapter. Allowed: 'retain','trim','mask','none','lowercase'.
+    overlap: 3 # int(3): Minimum number of bases required to overlap with the adapter.
+    error_rate: 0.1 # float(0.1): Error tolerance used when searching for adapter.
+    times: 1 # int(1): How many times to repeat adapter removal.
+    keep_trimmed_only: false # bool(false): Discard reads with no adapters found.
+    adapters_anywhere_file: "test_data/adapters/artic_v4.fa" # null/str: Fasta file path with adapters to be matched 'anywhere'.
+    adapters_3_end_file: null # null/str: Fasta file path with adapters to be matched at 3'end.
+    adapters_5_end_file: null # null/str: Fasta file path with adapters to be matched at 5'end.
+  shorten_to_length: null # null/int: Shorten each read to the specified length. Corresponds to the cutadapt length parameter.
+  trim_N_bases_on_ends: false # bool(false): Set to true to trim 'N' bases on ends.
+  min_length_r1: null # null/int: Discards R1 reads shorter than this. Recommended to set at least to 1, to discard empty reads.
+  min_length_r2: null # null/int: Discards R2 reads shorter than this. Recommended to set at least to 1, to discard empty reads.
+  max_length_r1: null # null/int: Discards R1 reads longer than this value.
+  max_length_r2: null # null/int: Discards R2 reads longer than this value.
+  max_n_bases: null # null/int: Removes reads with more 'N' bases than the specified number.
+  max_expected_errors: null # null/int: Discard reads whose expected number of errors exceeds this value.
+
+reads__decontamination__kraken:
+  kraken_dir: "path_to_kraken/k2_viral_20230314" # Directory containing kraken DB files. If does not exist, will be downloaded using the dirname.
+  # get KRAKEN_TAG from https://benlangmead.github.io/aws-indexes/k2
+  taxa_ids: # list of taxonomy IDs to exclude.
+    - 9606 # Homo Sapiens
+  filter_mode: "exclude"
+  filter_children: false # Whether to exclude reads classified at more specific levels than specified taxonomy ID levels.
+  filter_ancestors: false # Whether to exclude reads classified at all taxonomy levels between root and the specified taxonomy ID levels.
+  save_memory: true # If true, kraken limits RAM memory usage but sacrifices speed.
+  generate_krona: false # If true, krona is generated from kraken report
+  krona_dir: null #"path_to_krona/{TIMESTAMP}"
+
+reads__decontamination__bwa: # Relevant only if reads->decontamination is set to bwa.
+  references: # list of min 1 str: List of reference fasta files.
+    - "test_data/test_ref.fa"
+  filter_mode: "exclude" # enum(exclude): Mapped reads are either excluded or included. Allowed: 'include','exclude'.
+
+### RESOURCES #############################
+
+max_threads: 2
+max_mem_mb: 6192
+
+resources:
+  reads__trimming_mem_mb: 4096
+  reads__fastqc_mem_mb: 2048
+  mapping__mapping_mem_mb: 4096
+  mapping__indexing_mem_mb: 4096
+  mapping__deduplication_mem_mb: 4096
+  mapping__qualimap_mem_mb: 4096
+
+threads:
+  reads__trimming: 4
+  reads__fastqc: 1
+  reads__deduplication: 4
+  reads__decontamination: 8
+  mapping__mapping: 2
+  mapping__indexing: 2
+
+module_versions:
+  reads: "v3.6.1"

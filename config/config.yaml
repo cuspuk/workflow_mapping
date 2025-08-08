@@ -6,7 +6,7 @@ reads: # Specify the order and methods for each read processing step. If no meth
   _generate_fastqc_for: ["original", "decontamination"] # list of enum: Specify which steps to generate fastqc for. Allowed: 'original','subsampling','trimming','decontamination','deduplication'.
 
 mapping:
-  mapping: "bwa" # enum(bwa): Mapping tool to use. Allowed: 'bwa'.
+  mapping: "bwa" # enum(bwa): Mapping tool to use. Allowed: 'bwa', 'hisat2'.
   reference_fasta_paths: ["example.fa"] # list of min 1 str(['example.fa']): References to map against. Provide paths to the reference fasta files.
   deduplication: "picard" # null/enum: Deduplication method to use. Allowed: 'picard'.
   _generate_qualimap: true # bool(true): If true, qualimap will be generated for the last step.
