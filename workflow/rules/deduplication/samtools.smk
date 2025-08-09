@@ -26,7 +26,7 @@ rule samtools_fixmate:
     resources:
         mem_mb=get_mem_mb_for_deduplication,
     params:
-        extra="",
+        extra="-m",
     wrapper:
         "v7.2.0/bio/samtools/fixmate/"
 
