@@ -8,7 +8,7 @@ reads: # Specify the order and methods for each read processing step. If no meth
 mapping:
   mapping: "bwa" # Specify method for mapping. Allowed: "bwa".
   reference_fasta_paths: ["test_data/reference/sars_cov_2/sars_cov_2.fa"] # specify list of reference dirs to map against. Each dir must contain a fasta file names as the basename dir.
-  deduplication: "picard" # OPT - specify method for mapping deduplication. Allowed: "picard", null.
+  deduplication: "samtools" # OPT - specify method for mapping deduplication. Allowed: "picard", null.
   _generate_qualimap: true
 
 ### HYPERPARAMETERS #############################

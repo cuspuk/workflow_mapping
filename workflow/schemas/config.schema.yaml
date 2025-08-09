@@ -81,6 +81,7 @@ definitions:
         description: "Deduplication method to use."
         enum:
           - "picard"
+          - "samtools"
           - null
         default: null
         examples:
