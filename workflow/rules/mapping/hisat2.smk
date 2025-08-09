@@ -35,7 +35,7 @@ rule hisat2_alignL:
     log:
         "logs/mapping/hisat2/{reference}/{sample}.log",
     params:
-        extra="",
+        extra="--rg-id {sample} --rg SM:{sample} --rg PL:UNKNOWN",
     threads: min(config["threads"]["mapping__mapping"], config["max_threads"])
     resources:
         mem_mb=get_mem_mb_for_mapping,
