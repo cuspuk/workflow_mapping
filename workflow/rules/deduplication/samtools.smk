@@ -54,7 +54,7 @@ rule samtools_markdup:
     log:
         "logs/deduplication/samtools_markdup/{reference}/{sample}.log",
     params:
-        extra="-c --no-PG",
+        extra="-c --no-PG --json",
     threads: min(config["threads"]["mapping__mapping"], config["max_threads"])
     resources:
         mem_mb=get_mem_mb_for_deduplication,

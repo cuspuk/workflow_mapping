@@ -133,6 +133,8 @@ table_columns_visible:
   Samtools (?):
     flagstat_total: False
     mapped_passed: False
+    samtools_markdup-duplicate_fraction: True
+    samtools_markdup-estimated_library_size: False
   Qualimap:
     avg_gc: False
     median_insert_size: False
@@ -147,8 +149,6 @@ table_columns_visible:
     percentage_aligned: True
     mapped_reads: False
     total_reads: False
-    samtools_markdup-duplicate_fraction: True
-    samtools_markdup-estimated_library_size: False
 
 read_count_multiplier: 0.001
 read_count_prefix: "K"
