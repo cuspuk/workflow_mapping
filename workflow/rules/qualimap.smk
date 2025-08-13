@@ -1,4 +1,3 @@
-
 rule qualimap__mapping_quality_report:
     input:
         bam="results/mapping/{reference}/{sample}.{bam_step}.bam",
@@ -23,4 +22,4 @@ rule qualimap__mapping_quality_report:
     log:
         "logs/qualimap/{reference}/{bam_step}/{sample}.log",
     wrapper:
-        "https://github.com/cuspuk/workflow_wrappers/raw/v1.13.4/wrappers/qualimap/bamqc"
+        "v7.2.0/bio/qualimap/bamqc"

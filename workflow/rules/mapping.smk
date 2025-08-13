@@ -4,9 +4,11 @@ rule samtools__index_reference:
     output:
         protected("{reference_dir}/{reference}.fa.fai"),
     log:
-        "{reference_dir}/logs/samtools__prepare_fai_index/{reference}.log",
+        "{reference_dir}/logs/samtools__index_reference/{reference}.log",
+    params:
+        extra="",
     wrapper:
-        "https://github.com/cuspuk/workflow_wrappers/raw/v1.13.4/wrappers/samtools/faidx"
+        "v7.2.0/bio/samtools/faidx"
 
 
 rule custom__infer_read_group:
@@ -40,16 +42,18 @@ rule picard__prepare_dict_index:
 
 rule samtools__bam_index:
     input:
-        bam="results/mapping/{reference}/{sample}.original.bam",
+        "results/mapping/{reference}/{sample}.{step}.bam",
     output:
-        bai=temp_mapping("results/mapping/{reference}/{sample}.original.bam.bai"),
+        "results/mapping/{reference}/{sample}.{step}.bam.bai",
+    log:
+        "logs/samtools_index/{reference}/{step}/{sample}.log",
+    params:
+        extra="",
     threads: min(config["threads"]["mapping__indexing"], config["max_threads"])
     resources:
         mem_mb=get_mem_mb_for_indexing,
-    log:
-        "logs/mapping/indexing/{reference}/mapped/{sample}.log",
     wrapper:
-        "https://github.com/cuspuk/workflow_wrappers/raw/v1.13.4/wrappers/samtools/index"
+        "v7.2.0/bio/samtools/index"
 
 
 rule samtools__stats:
