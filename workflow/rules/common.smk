@@ -142,7 +142,7 @@ def infer_dragmap_index_for_mapping(wildcards):
 
 
 def infer_minimap2_index_for_mapping(wildcards):
-    return os.path.join(get_reference_dir_for_name(wildcards.reference), f"{wildcards.fasta}.mmi")
+    return os.path.join(get_reference_dir_for_name(wildcards.reference), f"{wildcards.reference}.mmi")
 
 
 def infer_final_bam(wildcards):
