@@ -153,7 +153,7 @@ def get_input_bai_for_sample_and_ref(sample: str, reference: str):
 def get_multiqc_inputs(reference: str):
     outs = get_multiqc_inputs_for_reads()
 
-    if config["mapping"]["deduplication"] == "picard":
+    if config["mapping"]["deduplication"] in ["picard", "samtools"]:
         outs["picard_dedup"] = expand(
             f"results/mapping/{reference}/{{sample}}.deduplication.stats",
             sample=get_sample_names(),
