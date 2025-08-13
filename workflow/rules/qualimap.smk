@@ -22,4 +22,4 @@ rule qualimap__mapping_quality_report:
     log:
         "logs/qualimap/{reference}/{bam_step}/{sample}.log",
     wrapper:
-        "v7.2.0/bio/qualimap/bamqc"
+        "https://github.com/cuspuk/workflow_wrappers/raw/v1.13.4/wrappers/qualimap/bamqc"

@@ -63,6 +63,9 @@ reads__decontamination__bwa: # Relevant only if reads->decontamination is set to
 
 reads__deduplication__fastuniq: {} # Relevant only if reads->deduplication is set to fastuniq. There are no parameters to be defined.
 
+mapping__mapping__minimap2: # Relevant only if mapping->mapping is set to minimap2.
+  preset: TO_BE_DEFINED # enum: Mapping preset options. Allowed: 'sr', 'map-ont', 'map-hifi', 'map-pb', 'asm5', 'asm10', 'asm20', 'splice', 'splice:hq', 'splice:sr', 'ava-pb', 'ava-ont', 'lr:hq', 'map-iclr'.
+
 # RESOURCES
 
 max_threads: 8 # int(8): Number of maximum threads to use in jobs.

@@ -58,6 +58,21 @@ definitions:
             resources:
               required:
                 - mapping__qualimap_mem_mb
+      - if:
+          properties:
+            mapping:
+              properties:
+                mapping:
+                  const: "minimap2"
+        then:
+          properties:
+            mapping__mapping__minimap2:
+              type: object
+              "$ref": "#/definitions/MappingMinimap2"
+              description: "Relevant only if mapping->mapping is set to minimap2."
+          required:
+            - mapping__mapping__minimap2
+          message: "mapping__mapping__minimap2 is required if mapping->mapping is set to minimap2."
   Mapping:
     additionalProperties: false
     title: Mapping
@@ -96,6 +111,30 @@ definitions:
       - reference_fasta_paths
       - deduplication
       - _generate_qualimap
+  MappingMinimap2:
+    additionalProperties: false
+    title: MappingMinimap2
+    properties:
+      preset:
+        type: string
+        enum:
+          - "sr"
+          - "map-ont"
+          - "map-hifi"
+          - "map-pb"
+          - "asm5"
+          - "asm10"
+          - "asm20"
+          - "splice"
+          - "splice:hq"
+          - "splice:sr"
+          - "ava-pb"
+          - "ava-ont"
+          - "lr:hq"
+          - "map-iclr"
+        description: "Mapping preset options."
+    required:
+      - preset
   Resources:
     additionalProperties: true
     properties:
