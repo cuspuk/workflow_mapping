@@ -127,6 +127,24 @@ def infer_hisat2_index_for_mapping(wildcards):
     )
 
 
+def infer_dragmap_index_for_mapping(wildcards):
+    return multiext(
+        os.path.join(get_reference_dir_for_name(wildcards.reference), "dragmap_index", wildcards.reference),
+        "hash_table.cfg",
+        "hash_table.cfg.bin",
+        "hash_table.cmp",
+        "hash_table_stats.txt",
+        "reference.bin",
+        "ref_index.bin",
+        "repeat_mask.bin",
+        "str_table.bin",
+    )
+
+
+def infer_minimap2_index_for_mapping(wildcards):
+    return os.path.join(get_reference_dir_for_name(wildcards.reference), f"{wildcards.fasta}.mmi")
+
+
 def infer_final_bam(wildcards):
     return get_input_bam_for_sample_and_ref(wildcards.sample, wildcards.reference)
 

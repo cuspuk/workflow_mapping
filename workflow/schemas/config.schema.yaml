@@ -67,6 +67,7 @@ definitions:
         enum:
           - "bwa"
           - "hisat2"
+          - "minimap2"
         description: "Mapping tool to use."
         default: "bwa"
       reference_fasta_paths:
