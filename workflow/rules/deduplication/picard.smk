@@ -11,4 +11,6 @@ rule picard__mark_duplicates:
     log:
         "logs/deduplication/picard/{reference}/{sample}.log",
     wrapper:
-        "v5.0.0/bio/picard/markduplicates"
+        "v7.2.0/bio/picard/markduplicates"
+
+ruleorder: picard__mark_duplicates > samtools__bam_index

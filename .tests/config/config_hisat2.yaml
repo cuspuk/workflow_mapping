@@ -6,9 +6,9 @@ reads: # Specify the order and methods for each read processing step. If no meth
   _generate_fastqc_for: ["trimming"] # list of enum: Specify which steps to generate fastqc for. Allowed: 'original','subsampling','trimming','decontamination','deduplication'.
 
 mapping:
-  mapping: "minimap2" # Specify method for mapping. Allowed: "bwa".
+  mapping: "hisat2" # Specify method for mapping. Allowed: "bwa".
   reference_fasta_paths: ["test_data/reference/sars_cov_2/sars_cov_2.fa"] # specify list of reference dirs to map against. Each dir must contain a fasta file names as the basename dir.
-  deduplication: "samtools" # OPT - specify method for mapping deduplication. Allowed: "picard", null.
+  deduplication: "picard" # OPT - specify method for mapping deduplication. Allowed: "picard", null.
   _generate_qualimap: true
 
 ### HYPERPARAMETERS #############################
@@ -63,9 +63,6 @@ reads__decontamination__bwa: # Relevant only if reads->decontamination is set to
   references: # list of min 1 str: List of reference fasta files.
     - "test_data/test_ref.fa"
   filter_mode: "exclude" # enum(exclude): Mapped reads are either excluded or included. Allowed: 'include','exclude'.
-
-mapping__mapping__minimap2: # Relevant only if mapping->mapping is set to minimap2.
-  preset: "splice" # enum: Mapping preset options. Allowed: 'sr', 'map-ont', 'map-hifi', 'map-pb', 'asm5', 'asm10', 'asm20', 'splice', 'splice:hq', 'splice:sr', 'ava-pb', 'ava-ont', 'lr:hq', 'map-iclr'.
 
 ### RESOURCES #############################
 

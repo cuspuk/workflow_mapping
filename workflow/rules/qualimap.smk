@@ -1,4 +1,3 @@
-
 rule qualimap__mapping_quality_report:
     input:
         bam="results/mapping/{reference}/{sample}.{bam_step}.bam",

@@ -13,8 +13,8 @@ rule multiqc__report:
         ),
     params:
         use_input_files_only=True,
-        extra=lambda wildcards: f"--title 'Reference: {wildcards.reference}'",
+        extra=lambda wildcards: f"--verbose --title 'Reference: {wildcards.reference}'",
     log:
         "logs/multiqc/{reference}.log",
     wrapper:
-        "v5.0.0/bio/multiqc"
+        "v7.2.0/bio/multiqc"

@@ -6,7 +6,7 @@ reads: # Specify the order and methods for each read processing step. If no meth
   _generate_fastqc_for: ["original", "decontamination"] # list of enum: Specify which steps to generate fastqc for. Allowed: 'original','subsampling','trimming','decontamination','deduplication'.
 
 mapping:
-  mapping: "bwa" # enum(bwa): Mapping tool to use. Allowed: 'bwa'.
+  mapping: "bwa" # enum(bwa): Mapping tool to use. Allowed: 'bwa', 'hisat2'.
   reference_fasta_paths: ["example.fa"] # list of min 1 str(['example.fa']): References to map against. Provide paths to the reference fasta files.
   deduplication: "picard" # null/enum: Deduplication method to use. Allowed: 'picard'.
   _generate_qualimap: true # bool(true): If true, qualimap will be generated for the last step.
@@ -62,6 +62,9 @@ reads__decontamination__bwa: # Relevant only if reads->decontamination is set to
   filter_mode: "exclude" # enum(exclude): Mapped reads are either excluded or included. Allowed: 'include','exclude'.
 
 reads__deduplication__fastuniq: {} # Relevant only if reads->deduplication is set to fastuniq. There are no parameters to be defined.
+
+mapping__mapping__minimap2: # Relevant only if mapping->mapping is set to minimap2.
+  preset: TO_BE_DEFINED # enum: Mapping preset options. Allowed: 'sr', 'map-ont', 'map-hifi', 'map-pb', 'asm5', 'asm10', 'asm20', 'splice', 'splice:hq', 'splice:sr', 'ava-pb', 'ava-ont', 'lr:hq', 'map-iclr'.
 
 # RESOURCES
 

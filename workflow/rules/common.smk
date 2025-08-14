@@ -113,6 +113,38 @@ def infer_bwa_index_for_mapping(wildcards):
     )
 
 
+def infer_hisat2_index_for_mapping(wildcards):
+    return multiext(
+        os.path.join(get_reference_dir_for_name(wildcards.reference), "hisat2_index", wildcards.reference),
+        ".1.ht2l",
+        ".2.ht2l",
+        ".3.ht2l",
+        ".4.ht2l",
+        ".5.ht2l",
+        ".6.ht2l",
+        ".7.ht2l",
+        ".8.ht2l",
+    )
+
+
+def infer_dragmap_index_for_mapping(wildcards):
+    return multiext(
+        os.path.join(get_reference_dir_for_name(wildcards.reference), "dragmap_index", wildcards.reference),
+        "hash_table.cfg",
+        "hash_table.cfg.bin",
+        "hash_table.cmp",
+        "hash_table_stats.txt",
+        "reference.bin",
+        "ref_index.bin",
+        "repeat_mask.bin",
+        "str_table.bin",
+    )
+
+
+def infer_minimap2_index_for_mapping(wildcards):
+    return os.path.join(get_reference_dir_for_name(wildcards.reference), f"{wildcards.reference}.mmi")
+
+
 def infer_final_bam(wildcards):
     return get_input_bam_for_sample_and_ref(wildcards.sample, wildcards.reference)
 
@@ -139,7 +171,7 @@ def get_input_bai_for_sample_and_ref(sample: str, reference: str):
 def get_multiqc_inputs(reference: str):
     outs = get_multiqc_inputs_for_reads()
 
-    if config["mapping"]["deduplication"] == "picard":
+    if config["mapping"]["deduplication"] in ["picard", "samtools"]:
         outs["picard_dedup"] = expand(
             f"results/mapping/{reference}/{{sample}}.deduplication.stats",
             sample=get_sample_names(),
