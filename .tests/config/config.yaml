@@ -65,7 +65,7 @@ reads__decontamination__bwa: # Relevant only if reads->decontamination is set to
   filter_mode: "exclude" # enum(exclude): Mapped reads are either excluded or included. Allowed: 'include','exclude'.
 
 mapping__mapping__minimap2: # Relevant only if mapping->mapping is set to minimap2.
-  preset: "sr" # enum: Mapping preset options. Allowed: 'sr', 'map-ont', 'map-hifi', 'map-pb', 'asm5', 'asm10', 'asm20', 'splice', 'splice:hq', 'splice:sr', 'ava-pb', 'ava-ont', 'lr:hq', 'map-iclr'.
+  preset: "splice" # enum: Mapping preset options. Allowed: 'sr', 'map-ont', 'map-hifi', 'map-pb', 'asm5', 'asm10', 'asm20', 'splice', 'splice:hq', 'splice:sr', 'ava-pb', 'ava-ont', 'lr:hq', 'map-iclr'.
 
 ### RESOURCES #############################
 
