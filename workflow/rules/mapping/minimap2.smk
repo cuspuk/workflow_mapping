@@ -23,7 +23,7 @@ rule minimap2_bam_sorted:
     log:
         "logs/mapping/minimap2/{reference}/{sample}.log",
     params:
-        extra=lambda wildcards: f"{config['mapping__mapping__minimap2']['preset']} -R '@RG\\tID:{wildcards.sample}\\tSM:{wildcards.sample}'",
+        extra=lambda wildcards: f"-x \"{config['mapping__mapping__minimap2']['preset']}\" -R '@RG\\tID:{wildcards.sample}\\tSM:{wildcards.sample}'",
         sorting="coordinate",  # 'none', 'queryname' or 'coordinate'
         sort_extra="",  # optional: extra arguments for samtools/picard
     threads: min(config["threads"]["mapping__mapping"], config["max_threads"])
