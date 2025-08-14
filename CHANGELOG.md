@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.2.0](https://github.com/cuspuk/workflow_mapping/compare/v3.1.13...v3.2.0) (2025-08-14)
+
+
+### Features
+
+* added hisat2 mapper ([9fecc62](https://github.com/cuspuk/workflow_mapping/commit/9fecc625e6806a32f7859f9b33eff40a2f509195))
+* added minimap2 mapper ([ee9725d](https://github.com/cuspuk/workflow_mapping/commit/ee9725d444fc4e2ea9157ecc1ccf3be079326048))
+* added samtools markdup for deduplication ([0f3c5e9](https://github.com/cuspuk/workflow_mapping/commit/0f3c5e9356683aa0ea91b2d8bc8e9d14a049a2b1))
+* minimap2 ([86fc6c4](https://github.com/cuspuk/workflow_mapping/commit/86fc6c4afdfbcaa6283ea2f0e4c378f442cab9bc))
+
+
+### Bug Fixes
+
+* hisat2 now adds read group ([a786b3a](https://github.com/cuspuk/workflow_mapping/commit/a786b3a499b8c5f82527e4d5b56d135278962241))
+* multiqc supports samtools dedup ([2febab6](https://github.com/cuspuk/workflow_mapping/commit/2febab6d427d488df4d86653d781a7bc15216cf7))
+
+
+### Performance Improvements
+
+* bumped snakemake wrappers ([b335814](https://github.com/cuspuk/workflow_mapping/commit/b335814f0f609e027e1609b060b85a6e3356bf1e))
+
 ## [3.1.13](https://github.com/cuspuk/workflow_mapping/compare/v3.1.12...v3.1.13) (2024-11-02)
 
 
