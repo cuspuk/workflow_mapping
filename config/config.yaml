@@ -6,10 +6,16 @@ reads: # Specify the order and methods for each read processing step. If no meth
   _generate_fastqc_for: ["original", "decontamination"] # list of enum: Specify which steps to generate fastqc for. Allowed: 'original','subsampling','trimming','decontamination','deduplication'.
 
 mapping:
+  _input: "reads" # enum(reads): Input data for mapping. Allowed: 'reads' or 'assembly'.
   mapping: "bwa" # enum(bwa): Mapping tool to use. Allowed: 'bwa', 'hisat2'.
   reference_fasta_paths: ["example.fa"] # list of min 1 str(['example.fa']): References to map against. Provide paths to the reference fasta files.
   deduplication: "picard" # null/enum: Deduplication method to use. Allowed: 'picard'.
   _generate_qualimap: true # bool(true): If true, qualimap will be generated for the last step.
+
+assembly: # Uses processed reads. If no assembly method is specified, the step will not be performed.
+  assembly: "spades" # enum: Assembly tool to use. Allowed: 'spades'.
+  report: ["quast", "bandage"] # list of enum([]): Reporting tool for assembly QC. Allowed: 'bandage','quast'.
+  classification: ["blast"] # list of enum([]): Classification method to use for contigs. Allowed: 'blast'.
 
 # HYPERPARAMETERS
 
@@ -66,6 +72,10 @@ reads__deduplication__fastuniq: {} # Relevant only if reads->deduplication is se
 mapping__mapping__minimap2: # Relevant only if mapping->mapping is set to minimap2.
   preset: TO_BE_DEFINED # enum: Mapping preset options. Allowed: 'sr', 'map-ont', 'map-hifi', 'map-pb', 'asm5', 'asm10', 'asm20', 'splice', 'splice:hq', 'splice:sr', 'ava-pb', 'ava-ont', 'lr:hq', 'map-iclr'.
 
+assembly__assembly__spades:
+  mode: "meta" # enum(standard): if true, kraken limits RAM memory usage but sacrifices speed Allowed: 'standard','meta','plasmid','metaplasmid','metaviral','bio','rna','rnaviral'.
+  careful: false # bool(false): When set to true, spades tries to reduce number of mismatches and short indels, but it has longer runtime.
+
 # RESOURCES
 
 max_threads: 8 # int(8): Number of maximum threads to use in jobs.
@@ -77,6 +87,7 @@ resources:
   mapping__indexing_mem_mb: 4096 # int(4096): Memory in MB to reserve for bam_index.
   mapping__deduplication_mem_mb: 8192 # int(8192): Memory in MB to reserve for picard.
   mapping__qualimap_mem_mb: 4096 # int(4096): Memory in MB to reserve for qualimap.
+  assembly__assembly_mem_mb: 64000 # int(64000): Memory in MB to reserve for assembly.
 threads:
   reads__trimming: 4 # int(4): Number of threads to use for trimming.
   reads__deduplication: 4 # int(4): Number of threads to use for deduplication.
@@ -84,6 +95,7 @@ threads:
   reads__fastqc: 1 # int(1): Number of threads to use for fastqc.
   mapping__mapping: 4 # int(4): Number of threads to use for mapping.
   mapping__indexing: 2 # int(2): Number of threads to use for bam_index.
+  assembly__assembly: 16 # int(16): Number of threads to use for assembly.
 
 module_versions:
   reads: "v3.6.1" # str(v3.6.1): Version of reads module.

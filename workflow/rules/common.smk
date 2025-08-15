@@ -11,7 +11,20 @@ validate(config, "../schemas/config.schema.yaml", set_default=False)
 
 
 def get_fastq_for_mapping(wildcards):
-    return reads_workflow.get_final_fastq_for_sample(wildcards.sample)
+    if config["mapping"]["_input"] == "reads":
+        return reads_workflow.get_final_fastq_for_sample(wildcards.sample)
+    elif config["mapping"]["_input"] == "assembly":
+        return get_assembly_fasta(wildcards.sample)
+    else:
+        raise ValueError(f"Invalid input type for mapping: {config['mapping']['_input']}")
+
+
+def get_fastq_for_assembly(wildcards):
+    reads = reads_workflow.get_final_fastq_for_sample(wildcards.sample)
+    return {
+        "r1": reads[0],
+        "r2": reads[1],
+    }
 
 
 def get_sample_names():
@@ -49,11 +62,6 @@ def get_reference_names():
     return reference_dict.keys()
 
 
-# def sample_has_enough_mapped_reads(sample_name: str):
-#     with checkpoints.checkpoint__min_mapped_reads_count.get(sample=sample_name).output[0].open() as f:
-#         num = int(f.read().strip())
-#     return num >= 1
-
 ### Global rule-set stuff #############################################################################################
 
 
@@ -74,7 +82,7 @@ def get_last_bam_step():
     return "deduplication" if config["mapping"]["deduplication"] else "original"
 
 
-def get_outputs():
+def get_outputs_of_mapping():
     sample_names = get_sample_names()
 
     outputs = {}
@@ -91,8 +99,31 @@ def get_outputs():
             reference=get_reference_names(),
         )
 
-    outputs = outputs | get_reads_outputs()
     return outputs
+
+
+def get_assembly_fasta(sample: str):
+    assembly_tool = config["assembly"]["assembly"]
+    return f"results/assembly/{sample}/{assembly_tool}/contigs.fasta"
+
+
+def get_outputs_of_assembly():
+    if config["assembly"]["assembly"] == "":
+        return {}
+
+    outputs = {}
+    sample_names = get_sample_names()
+
+    assembly_outputs = []
+    for sample in sample_names:
+        assembly_outputs.append(get_assembly_fasta(sample))
+    outputs["assembly"] = assembly_outputs
+
+    return outputs
+
+
+def get_outputs():
+    return get_outputs_of_mapping() | get_reads_outputs() | get_outputs_of_assembly()
 
 
 def get_standalone_outputs():
@@ -198,7 +229,23 @@ def infer_multiqc_inputs_for_reference(wildcards):
 ### Parameter parsing from config #####################################################################################
 
 
+def get_spades_params():
+    mode = (
+        ""
+        if config["assembly__assembly__spades"]["mode"] == "standard"
+        else f'--{config["assembly__assembly__spades"]["mode"]}'
+    )
+    careful = "--careful" if config["assembly__assembly__spades"]["careful"] else ""
+    if mode and careful:
+        return f"{mode} {careful}"
+    return mode + careful
+
+
 ### Resource handling #################################################################################################
+
+
+def get_mem_mb_for_assembly(wildcards, attempt):
+    return min(config["max_mem_mb"], config["resources"]["assembly__assembly_mem_mb"] * attempt)
 
 
 def get_mem_mb_for_deduplication(wildcards, attempt):
@@ -215,3 +262,7 @@ def get_mem_mb_for_mapping(wildcards, attempt):
 
 def get_mem_mb_for_indexing(wildcards, attempt):
     return min(config["max_mem_mb"], config["resources"]["mapping__indexing_mem_mb"] * attempt)
+
+
+def get_threads_for_assembly():
+    return min(config["threads"]["assembly__assembly"], config["max_threads"])

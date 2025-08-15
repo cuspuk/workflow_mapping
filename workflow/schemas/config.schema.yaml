@@ -8,6 +8,9 @@ definitions:
       mapping:
         type: object
         "$ref": "#/definitions/Mapping"
+      assembly:
+        type: object
+        "$ref": "#/definitions/Assembly"
       max_threads:
         type: integer
         description: "Number of maximum threads to use in jobs."
@@ -31,6 +34,7 @@ definitions:
       - max_threads
       - max_mem_mb
       - mapping
+      - assembly
       - resources
       - threads
       - module_versions
@@ -60,6 +64,20 @@ definitions:
                 - mapping__qualimap_mem_mb
       - if:
           properties:
+            assembly:
+              properties:
+                assembly:
+                  type: string
+        then:
+          properties:
+            resources:
+              required:
+                - assembly__assembly_mem_mb
+            threads:
+              required:
+                - assembly__assembly
+      - if:
+          properties:
             mapping:
               properties:
                 mapping:
@@ -73,10 +91,29 @@ definitions:
           required:
             - mapping__mapping__minimap2
           message: "mapping__mapping__minimap2 is required if mapping->mapping is set to minimap2."
+      - if:
+          properties:
+            assembly:
+              properties:
+                mapping:
+                  const: "spades"
+        then:
+          properties:
+            assembly__assembly__spades:
+              type: object
+              "$ref": "#/definitions/AssemblyAssemblySpades"
+          required:
+            - assembly__assembly__spades
+          message: "assembly__assembly__spades is required if assembly->assembly is set to spades."
   Mapping:
     additionalProperties: false
     title: Mapping
     properties:
+      _input:
+        type: string
+        enum: ["reads", "assembly"]
+        description: "Input data for mapping. Allowed: 'reads' or 'assembly'."
+        default: "reads"
       mapping:
         type: string
         enum:
@@ -111,6 +148,39 @@ definitions:
       - reference_fasta_paths
       - deduplication
       - _generate_qualimap
+  Assembly:
+    additionalProperties: false
+    title: Assembly
+    properties:
+      assembly:
+        type: [string, "null"]
+        description: "Assembly tool to use."
+        enum:
+          - "spades"
+          - null
+        examples: ["spades"]
+        default: null
+      report:
+        type: array
+        description: "Reporting tool for assembly QC."
+        items:
+          type: string
+          enum:
+            - "bandage"
+            - "quast"
+        examples: [["quast", "bandage"]]
+      classification:
+        type: array
+        description: "Classification method to use for contigs."
+        items:
+          type: string
+          enum:
+            - "blast"
+        examples: [["blast"]]
+    required:
+      - assembly
+      - report
+      - classification
   MappingMinimap2:
     additionalProperties: false
     title: MappingMinimap2
@@ -135,6 +205,33 @@ definitions:
         description: "Mapping preset options."
     required:
       - preset
+  AssemblyAssemblySpades:
+    type: object
+    additionalProperties: false
+    properties:
+      mode:
+        type: string
+        enum:
+          - "standard"
+          - "meta"
+          - "plasmid"
+          - "metaplasmid"
+          - "metaviral"
+          - "bio"
+          - "rna"
+          - "rnaviral"
+        default: "standard"
+        description: "if true, kraken limits RAM memory usage but sacrifices speed"
+        example: ["meta"]
+      careful:
+        type: boolean
+        description: "When set to true, spades tries to reduce number of mismatches and short indels, but it has longer runtime."
+        default: false
+        example: [false]
+    required:
+      - mode
+      - careful
+    title: AssemblyAssemblySpades
   Resources:
     additionalProperties: true
     properties:
@@ -154,6 +251,10 @@ definitions:
         type: integer
         description: "Memory in MB to reserve for qualimap"
         default: 4096
+      assembly__assembly_mem_mb:
+        type: integer
+        description: "Memory in MB to reserve for assembly"
+        default: 64000
     required:
       - mapping__mapping_mem_mb
       - mapping__indexing_mem_mb
@@ -171,6 +272,10 @@ definitions:
         default: 2
         minimum: 1
         description: "Number of threads to use for bam_index"
+      assembly__assembly:
+        type: integer
+        default: 16
+        description: "Number of threads to use for assembly"
     title: Threads
     required:
       - mapping__mapping
