@@ -212,17 +212,20 @@ definitions:
       mode:
         type: string
         enum:
-          - "standard"
-          - "meta"
+          - "isolate"
+          - "sc"
           - "plasmid"
+          - "meta"
           - "metaplasmid"
           - "metaviral"
-          - "bio"
           - "rna"
           - "rnaviral"
-        default: "standard"
-        description: "if true, kraken limits RAM memory usage but sacrifices speed"
-        example: ["meta"]
+          - "bio"
+          - "corona"
+          - "sewage"
+        default: "isolate"
+        description: "Assembly mode to use."
+        example: ["isolate"]
       careful:
         type: boolean
         description: "When set to true, spades tries to reduce number of mismatches and short indels, but it has longer runtime."

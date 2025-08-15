@@ -75,8 +75,21 @@ mapping__mapping__minimap2: # Relevant only if mapping->mapping is set to minima
   preset: TO_BE_DEFINED # enum: Mapping preset options. Allowed: 'sr', 'map-ont', 'map-hifi', 'map-pb', 'asm5', 'asm10', 'asm20', 'splice', 'splice:hq', 'splice:sr', 'ava-pb', 'ava-ont', 'lr:hq', 'map-iclr'.
 
 assembly__assembly__spades:
-  mode: "meta" # enum(standard): if true, kraken limits RAM memory usage but sacrifices speed Allowed: 'standard','meta','plasmid','metaplasmid','metaviral','bio','rna','rnaviral'.
+  mode: "isolate" # enum(standard): Allowed: "isolate", "sc", "plasmid", "meta", "metaplasmid", "metaviral", "rna", "rnaviral", "bio", "corona", "sewage".
   careful: false # bool(false): When set to true, spades tries to reduce number of mismatches and short indels, but it has longer runtime.
+
+assembly__report__quast:
+  min_contig_length: 500 # int(500): Minimum length in bp of contigs to evaluate in metrics.
+  extra: "" # str: Specify any extra parameters for QUAST per manual.
+
+assembly__classification__blast:
+  db_dir: "/data/genome/blast/{BLAST_DB_TAG}/{TIMESTAMP}" # str: Directory path where Blast DB is located, or where will be downloaded. For BLAST TAG use: "18S_fungal_sequences" "Betacoronavirus" "ref_viroids_rep_genomes" "ref_viruses_rep_genomes" "refseq_select_rna" "refseq_select_prot" "refseq_protein" "refseq_rna" "16S_ribosomal_RNA" "ITS_RefSeq_Fungi" "28S_fungal_sequences" "ITS_eukaryote_sequences" "LSU_eukaryote_rRNA" "LSU_prokaryote_rRNA" "SSU_eukaryote_rRNA" "env_nt" "env_nr" "human_genome" "landmark" "mito" "mouse_genome" "nr" "nt_euk" "nt" "nt_others" "swissprot" "tsa_nr" "tsa_nt" "taxdb" "nt_prok" "nt_viruses" "pataa" "patnt" "pdbaa" "pdbnt" "ref_euk_rep_genomes" "ref_prok_rep_genomes.
+  query_vs_db: "nucleotide-nucleotide" # enum: Type of DB and type of input sequences, used to infer blast binary. Allowed: 'nucleotide-nucleotide','nucleotide-protein','protein-protein','protein-nucleotide'.
+  max_number_of_hits: 5 # int: DESCRIPTION_MISSING.
+  max_query_seqs: 2000 # int: Maximal number of contigs to report, ordered by their length.
+  max_target_seqs: 5 # int: Maximal number of homologues from reference genomes to report.
+  min_query_coverage: 0.01 # float: Show only hits that have at least this proportion of contig mapped to reference.
+  seqs_per_page: 100 # int: Number of table rows (sequences) per page.
 
 # RESOURCES
 
