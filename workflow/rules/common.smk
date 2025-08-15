@@ -194,7 +194,7 @@ def get_assembly_fasta(sample: str):
 
 
 def get_outputs_of_assembly():
-    if config["assembly"]["assembly"] == "":
+    if not config["assembly"]["assembly"]:
         return {}
 
     outputs = {}
