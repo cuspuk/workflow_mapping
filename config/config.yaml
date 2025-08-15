@@ -13,7 +13,7 @@ mapping:
   _generate_qualimap: true # bool(true): If true, qualimap will be generated for the last step.
 
 assembly: # Uses processed reads. If no assembly method is specified, the step will not be performed.
-  assembly: "spades" # enum: Assembly tool to use. Allowed: 'spades'.
+  assembly: "spades" # null/enum: Assembly tool to use. Allowed: 'spades'.
   report: ["quast", "bandage"] # list of enum([]): Reporting tool for assembly QC. Allowed: 'bandage','quast'.
   classification: ["blast"] # list of enum([]): Classification method to use for contigs. Allowed: 'blast'.
 
@@ -45,6 +45,7 @@ reads__trimming__cutadapt: # Relevant only if reads->trimming is set to cutadapt
     adapters_3_end_file: TO_BE_DEFINED # null/str: Fasta file path with adapters to be matched at 3'end.
     adapters_5_end_file: TO_BE_DEFINED # null/str: Fasta file path with adapters to be matched at 5'end.
   shorten_to_length: null # null/int: Shorten each read to the specified length. Corresponds to the cutadapt length parameter.
+  shorten_to_length_r2: null # null/int: Shorten each R2 read to the specified length. If not specified, 'shorten_to_length' is applied for R2 as well.
   trim_N_bases_on_ends: false # bool(false): Set to true to trim 'N' bases on ends.
   min_length_r1: 45 # null/int: Discards R1 reads shorter than this. Recommended to set at least to 1, to discard empty reads.
   min_length_r2: 45 # null/int: Discards R2 reads shorter than this. Recommended to set at least to 1, to discard empty reads.
@@ -52,6 +53,7 @@ reads__trimming__cutadapt: # Relevant only if reads->trimming is set to cutadapt
   max_length_r2: null # null/int: Discards R2 reads longer than this value.
   max_n_bases: null # null/int: Removes reads with more 'N' bases than the specified number.
   max_expected_errors: null # null/int: Discard reads whose expected number of errors exceeds this value.
+  max_average_error_rate: null # null/float: Discard reads whose average error rate exceeds this value. Between 0 and 1.
 
 reads__decontamination__kraken: # Relevant only if reads->decontamination is set to kraken.
   kraken_dir: "/data/genome/metagenome/kraken/k2_pluspf_20240112" # str: Directory with the kraken DB files. If does not exist, the workflow tries to download DB by using the basename. See https://benlangmead.github.io/aws-indexes/k2.
@@ -98,4 +100,4 @@ threads:
   assembly__assembly: 16 # int(16): Number of threads to use for assembly.
 
 module_versions:
-  reads: "v3.6.1" # str(v3.6.1): Version of reads module.
+  reads: "v3.7.0" # str(v3.7.0): Version of reads module.

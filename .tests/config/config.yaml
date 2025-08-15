@@ -44,14 +44,16 @@ reads__trimming__cutadapt: # Relevant only if reads->trimming is set to cutadapt
     adapters_anywhere_file: "test_data/adapters/artic_v4.fa" # null/str: Fasta file path with adapters to be matched 'anywhere'.
     adapters_3_end_file: null # null/str: Fasta file path with adapters to be matched at 3'end.
     adapters_5_end_file: null # null/str: Fasta file path with adapters to be matched at 5'end.
-  shorten_to_length: null # null/int: Shorten each read to the specified length. Corresponds to the cutadapt length parameter.
+  shorten_to_length: 500 # null/int: Shorten each read to the specified length. Corresponds to the cutadapt length parameter.
+  shorten_to_length_r2: 550 # null/int: Shorten each R2 read to the specified length. If not specified, 'shorten_to_length' is applied for R2 as well.
   trim_N_bases_on_ends: false # bool(false): Set to true to trim 'N' bases on ends.
   min_length_r1: null # null/int: Discards R1 reads shorter than this. Recommended to set at least to 1, to discard empty reads.
   min_length_r2: null # null/int: Discards R2 reads shorter than this. Recommended to set at least to 1, to discard empty reads.
   max_length_r1: null # null/int: Discards R1 reads longer than this value.
   max_length_r2: null # null/int: Discards R2 reads longer than this value.
   max_n_bases: null # null/int: Removes reads with more 'N' bases than the specified number.
-  max_expected_errors: null # null/int: Discard reads whose expected number of errors exceeds this value.
+  max_expected_errors: 5 # null/int: Discard reads whose expected number of errors exceeds this value.
+  max_average_error_rate: 0.8 # null/float: Discard reads whose average error rate exceeds this value. Between 0 and 1.
 
 reads__decontamination__kraken:
   kraken_dir: "path_to_kraken/k2_viral_20230314" # Directory containing kraken DB files. If does not exist, will be downloaded using the dirname.
@@ -101,4 +103,4 @@ threads:
   assembly__assembly: 16 # Number of threads to use for assembly.
 
 module_versions:
-  reads: "v3.6.1"
+  reads: "v3.7.0"

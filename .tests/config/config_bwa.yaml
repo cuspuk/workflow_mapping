@@ -6,10 +6,16 @@ reads: # Specify the order and methods for each read processing step. If no meth
   _generate_fastqc_for: ["trimming"] # list of enum: Specify which steps to generate fastqc for. Allowed: 'original','subsampling','trimming','decontamination','deduplication'.
 
 mapping:
+  _input: "reads" # enum(reads): Input data for mapping. Allowed: 'reads' or 'assembly'.
   mapping: "bwa" # Specify method for mapping. Allowed: "bwa".
   reference_fasta_paths: ["test_data/reference/sars_cov_2/sars_cov_2.fa"] # specify list of reference dirs to map against. Each dir must contain a fasta file names as the basename dir.
   deduplication: "samtools" # OPT - specify method for mapping deduplication. Allowed: "picard", null.
   _generate_qualimap: true
+
+assembly: # Uses processed reads. If no assembly method is specified, the step will not be performed.
+  assembly: null # enum: Assembly tool to use. Allowed: 'spades'.
+  report: ["quast", "bandage"] # list of enum([]): Reporting tool for assembly QC. Allowed: 'bandage','quast'.
+  classification: ["blast"] # list of enum([]): Classification method to use for contigs. Allowed: 'blast'.
 
 ### HYPERPARAMETERS #############################
 
@@ -76,6 +82,7 @@ resources:
   mapping__indexing_mem_mb: 4096
   mapping__deduplication_mem_mb: 4096
   mapping__qualimap_mem_mb: 4096
+  assembly__assembly_mem_mb: 64000 # Memory in MB to reserve for assembly
 
 threads:
   reads__trimming: 4
@@ -84,6 +91,7 @@ threads:
   reads__decontamination: 8
   mapping__mapping: 2
   mapping__indexing: 2
+  assembly__assembly: 16 # Number of threads to use for assembly.
 
 module_versions:
-  reads: "v3.6.1"
+  reads: "v3.7.0"
