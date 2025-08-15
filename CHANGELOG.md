@@ -1,5 +1,21 @@
 # Changelog
 
+## [4.0.0](https://github.com/cuspuk/workflow_mapping/compare/v3.2.0...v4.0.0) (2025-08-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* added assembly, added mapping to be run from assembly
+
+### Features
+
+* added assembly, added mapping to be run from assembly ([301cbdc](https://github.com/cuspuk/workflow_mapping/commit/301cbdc88be83c3c7e4f8fac3965ba49d8c44605))
+
+
+### Performance Improvements
+
+* bumped spades and its options ([0c3c05b](https://github.com/cuspuk/workflow_mapping/commit/0c3c05bbcc34f96c5c69fdf96d905090df6c96ac))
+
 ## [3.2.0](https://github.com/cuspuk/workflow_mapping/compare/v3.1.13...v3.2.0) (2025-08-14)
 
 
