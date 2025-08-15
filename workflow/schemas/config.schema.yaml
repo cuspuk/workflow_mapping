@@ -83,6 +83,20 @@ definitions:
           properties:
             mapping:
               properties:
+                _input:
+                  const: "assembly"
+        then:
+          properties:
+            assembly:
+              properties:
+                assembly:
+                  type: [string, "null"]
+                  enum: ["spades"]
+          message: "assembly is required if mapping->_input is set to assembly."
+      - if:
+          properties:
+            mapping:
+              properties:
                 mapping:
                   const: "minimap2"
         then:
