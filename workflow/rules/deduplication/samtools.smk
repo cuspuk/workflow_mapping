@@ -60,3 +60,19 @@ rule samtools_markdup:
         mem_mb=get_mem_mb_for_deduplication,
     wrapper:
         "v7.2.0/bio/samtools/markdup"
+
+
+rule samtools__bam_index_deduplication:
+    input:
+        "results/mapping/{reference}/{sample}.deduplication.bam",
+    output:
+        "results/mapping/{reference}/{sample}.deduplication.bam.bai",
+    log:
+        "logs/samtools_index/{reference}/deduplication/{sample}.log",
+    params:
+        extra="",
+    threads: min(config["threads"]["mapping__indexing"], config["max_threads"])
+    resources:
+        mem_mb=get_mem_mb_for_indexing,
+    wrapper:
+        "v7.2.0/bio/samtools/index"
