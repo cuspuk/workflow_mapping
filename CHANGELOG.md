@@ -1,5 +1,12 @@
 # Changelog
 
+## [4.0.1](https://github.com/cuspuk/workflow_mapping/compare/v4.0.0...v4.0.1) (2025-08-15)
+
+
+### Bug Fixes
+
+* schema checks case when assembly is requested in mapping ([e7173c8](https://github.com/cuspuk/workflow_mapping/commit/e7173c86b9f9f6dd08de2b26e3f8093c30d03b51))
+
 ## [4.0.0](https://github.com/cuspuk/workflow_mapping/compare/v3.2.0...v4.0.0) (2025-08-15)
 
 
