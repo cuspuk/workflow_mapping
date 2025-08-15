@@ -8,6 +8,9 @@ definitions:
       mapping:
         type: object
         "$ref": "#/definitions/Mapping"
+      assembly:
+        type: object
+        "$ref": "#/definitions/Assembly"
       max_threads:
         type: integer
         description: "Number of maximum threads to use in jobs."
@@ -31,6 +34,7 @@ definitions:
       - max_threads
       - max_mem_mb
       - mapping
+      - assembly
       - resources
       - threads
       - module_versions
@@ -60,6 +64,23 @@ definitions:
                 - mapping__qualimap_mem_mb
       - if:
           properties:
+            assembly:
+              properties:
+                assembly:
+                  type: string
+        then:
+          properties:
+            resources:
+              required:
+                - assembly__assembly_mem_mb
+                - assembly__classification_mem_mb
+            threads:
+              required:
+                - assembly__assembly
+                - assembly__classification
+                - assembly__report
+      - if:
+          properties:
             mapping:
               properties:
                 mapping:
@@ -73,10 +94,37 @@ definitions:
           required:
             - mapping__mapping__minimap2
           message: "mapping__mapping__minimap2 is required if mapping->mapping is set to minimap2."
+      - if:
+          properties:
+            assembly:
+              properties:
+                assembly:
+                  const: "spades"
+        then:
+          properties:
+            assembly__assembly__spades:
+              type: object
+              "$ref": "#/definitions/AssemblyAssemblySpades"
+            assembly__classification__blast:
+              type: object
+              "$ref": "#/definitions/AssemblyClassificationBlast"
+            assembly__report__quast:
+              type: object
+              "$ref": "#/definitions/AssemblyReportQuast"
+          required:
+            - assembly__assembly__spades
+            - assembly__classification__blast
+            - assembly__report__quast
+          message: "assembly__assembly__spades is required if assembly->assembly is set to spades."
   Mapping:
     additionalProperties: false
     title: Mapping
     properties:
+      _input:
+        type: string
+        enum: ["reads", "assembly"]
+        description: "Input data for mapping. Allowed: 'reads' or 'assembly'."
+        default: "reads"
       mapping:
         type: string
         enum:
@@ -111,6 +159,39 @@ definitions:
       - reference_fasta_paths
       - deduplication
       - _generate_qualimap
+  Assembly:
+    additionalProperties: false
+    title: Assembly
+    properties:
+      assembly:
+        type: [string, "null"]
+        description: "Assembly tool to use."
+        enum:
+          - "spades"
+          - null
+        examples: ["spades"]
+        default: null
+      report:
+        type: array
+        description: "Reporting tool for assembly QC."
+        items:
+          type: string
+          enum:
+            - "bandage"
+            - "quast"
+        examples: [["quast", "bandage"]]
+      classification:
+        type: array
+        description: "Classification method to use for contigs."
+        items:
+          type: string
+          enum:
+            - "blast"
+        examples: [["blast"]]
+    required:
+      - assembly
+      - report
+      - classification
   MappingMinimap2:
     additionalProperties: false
     title: MappingMinimap2
@@ -135,6 +216,97 @@ definitions:
         description: "Mapping preset options."
     required:
       - preset
+  AssemblyAssemblySpades:
+    type: object
+    additionalProperties: false
+    properties:
+      mode:
+        type: string
+        enum:
+          - "isolate"
+          - "sc"
+          - "plasmid"
+          - "meta"
+          - "metaplasmid"
+          - "metaviral"
+          - "rna"
+          - "rnaviral"
+          - "bio"
+          - "corona"
+          - "sewage"
+        default: "isolate"
+        description: "Assembly mode to use."
+        example: ["isolate"]
+      careful:
+        type: boolean
+        description: "When set to true, spades tries to reduce number of mismatches and short indels, but it has longer runtime."
+        default: false
+        example: [false]
+    required:
+      - mode
+      - careful
+    title: AssemblyAssemblySpades
+  AssemblyReportQuast:
+    type: object
+    additionalProperties: false
+    properties:
+      min_contig_length:
+        type: integer
+        description: "Minimum length in bp of contigs to evaluate in metrics"
+        default: 500
+        examples: [500]
+      extra:
+        type: string
+        default: ""
+        examples: [""]
+        description: "Specify any extra parameters for QUAST per manual"
+    required:
+      - min_contig_length
+      - extra
+    title: QuastParams
+  AssemblyClassificationBlast:
+    type: object
+    additionalProperties: false
+    properties:
+      db_dir:
+        type: string
+        description: 'Directory path where Blast DB is located, or where will be downloaded. For BLAST TAG use: "18S_fungal_sequences" "Betacoronavirus" "ref_viroids_rep_genomes" "ref_viruses_rep_genomes" "refseq_select_rna" "refseq_select_prot" "refseq_protein" "refseq_rna" "16S_ribosomal_RNA" "ITS_RefSeq_Fungi" "28S_fungal_sequences" "ITS_eukaryote_sequences" "LSU_eukaryote_rRNA" "LSU_prokaryote_rRNA" "SSU_eukaryote_rRNA" "env_nt" "env_nr" "human_genome" "landmark" "mito" "mouse_genome" "nr" "nt_euk" "nt" "nt_others" "swissprot" "tsa_nr" "tsa_nt" "taxdb" "nt_prok" "nt_viruses" "pataa" "patnt" "pdbaa" "pdbnt" "ref_euk_rep_genomes" "ref_prok_rep_genomes.'
+        examples: ["/data/genome/blast/{BLAST_DB_TAG}/{TIMESTAMP}"]
+      query_vs_db:
+        type: string
+        enum:
+          - "nucleotide-nucleotide"
+          - "nucleotide-protein"
+          - "protein-protein"
+          - "protein-nucleotide"
+        description: "Type of DB and type of input sequences, used to infer blast binary."
+        examples: ["nucleotide-nucleotide"]
+      max_number_of_hits:
+        type: integer
+        examples: [5]
+        default: "Maximum number of hits when querying DB."
+      max_query_seqs:
+        type: integer
+        minimum: 1
+        examples: [2000]
+        description: "Maximal number of contigs to report, ordered by their length."
+      max_target_seqs:
+        type: integer
+        minimum: 1
+        examples: [5]
+        description: "Maximal number of homologues from reference genomes to report."
+      min_query_coverage:
+        type: number
+        Minimum: 0
+        Maximum: 1
+        examples: [0.01]
+        description: "Show only hits that have at least this proportion of contig mapped to reference."
+      seqs_per_page:
+        type: integer
+        Minimum: 1
+        examples: [100]
+        description: "Number of table rows (sequences) per page."
+    title: BlastReportParams
   Resources:
     additionalProperties: true
     properties:
@@ -154,6 +326,14 @@ definitions:
         type: integer
         description: "Memory in MB to reserve for qualimap"
         default: 4096
+      assembly__assembly_mem_mb:
+        type: integer
+        description: "Memory in MB to reserve for assembly"
+        default: 64000
+      assembly__classification_mem_mb:
+        type: integer
+        description: "Memory in MB to reserve for classification"
+        default: 32000
     required:
       - mapping__mapping_mem_mb
       - mapping__indexing_mem_mb
@@ -171,6 +351,18 @@ definitions:
         default: 2
         minimum: 1
         description: "Number of threads to use for bam_index"
+      assembly__assembly:
+        type: integer
+        default: 16
+        description: "Number of threads to use for assembly"
+      assembly__classification:
+        type: integer
+        default: 8
+        description: "Number of threads to use for classification"
+      assembly__report:
+        type: integer
+        default: 2
+        description: "Number of threads to use for reporting"
     title: Threads
     required:
       - mapping__mapping
@@ -181,7 +373,7 @@ definitions:
     properties:
       reads:
         type: string
-        default: "v3.6.0"
+        default: "v3.7.0"
         pattern: "v[0-9]+.[0-9]+.[0-9]+"
         description: "Version of reads module"
     title: ModuleVersions

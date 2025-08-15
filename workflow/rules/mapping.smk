@@ -11,20 +11,6 @@ rule samtools__index_reference:
         "v7.2.0/bio/samtools/faidx"
 
 
-rule custom__infer_read_group:
-    input:
-        get_fastq_for_mapping,
-    output:
-        read_group="results/reads/.read_groups/{sample}.txt",
-    params:
-        sample_id=lambda wildcards: wildcards.sample,
-    log:
-        "logs/custom/infer_and_store_read_group/{sample}.log",
-    localrule: True
-    wrapper:
-        "https://github.com/cuspuk/workflow_wrappers/raw/v1.13.4/wrappers/custom/read_group"
-
-
 rule picard__prepare_dict_index:
     input:
         "{reference_dir}/{reference}.fa",
@@ -42,11 +28,11 @@ rule picard__prepare_dict_index:
 
 rule samtools__bam_index:
     input:
-        "results/mapping/{reference}/{sample}.{step}.bam",
+        "results/mapping/{reference}/{sample}.original.bam",
     output:
-        "results/mapping/{reference}/{sample}.{step}.bam.bai",
+        temp_mapping("results/mapping/{reference}/{sample}.original.bam.bai"),
     log:
-        "logs/samtools_index/{reference}/{step}/{sample}.log",
+        "logs/samtools_index/{reference}/original/{sample}.log",
     params:
         extra="",
     threads: min(config["threads"]["mapping__indexing"], config["max_threads"])

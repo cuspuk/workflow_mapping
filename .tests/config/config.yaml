@@ -6,10 +6,16 @@ reads: # Specify the order and methods for each read processing step. If no meth
   _generate_fastqc_for: ["trimming"] # list of enum: Specify which steps to generate fastqc for. Allowed: 'original','subsampling','trimming','decontamination','deduplication'.
 
 mapping:
+  _input: "assembly" # enum(reads): Input data for mapping. Allowed: 'reads' or 'assembly'.
   mapping: "minimap2" # Specify method for mapping. Allowed: "bwa".
   reference_fasta_paths: ["test_data/reference/sars_cov_2/sars_cov_2.fa"] # specify list of reference dirs to map against. Each dir must contain a fasta file names as the basename dir.
   deduplication: "samtools" # OPT - specify method for mapping deduplication. Allowed: "picard", null.
   _generate_qualimap: true
+
+assembly: # Uses processed reads. If no assembly method is specified, the step will not be performed.
+  assembly: "spades" # enum: Assembly tool to use. Allowed: 'spades'.
+  report: ["quast"] # list of enum([]): Reporting tool for assembly QC. Allowed: 'bandage','quast'.
+  classification: ["blast"] # list of enum([]): Classification method to use for contigs. Allowed: 'blast'.
 
 ### HYPERPARAMETERS #############################
 
@@ -38,14 +44,16 @@ reads__trimming__cutadapt: # Relevant only if reads->trimming is set to cutadapt
     adapters_anywhere_file: "test_data/adapters/artic_v4.fa" # null/str: Fasta file path with adapters to be matched 'anywhere'.
     adapters_3_end_file: null # null/str: Fasta file path with adapters to be matched at 3'end.
     adapters_5_end_file: null # null/str: Fasta file path with adapters to be matched at 5'end.
-  shorten_to_length: null # null/int: Shorten each read to the specified length. Corresponds to the cutadapt length parameter.
+  shorten_to_length: 500 # null/int: Shorten each read to the specified length. Corresponds to the cutadapt length parameter.
+  shorten_to_length_r2: 550 # null/int: Shorten each R2 read to the specified length. If not specified, 'shorten_to_length' is applied for R2 as well.
   trim_N_bases_on_ends: false # bool(false): Set to true to trim 'N' bases on ends.
   min_length_r1: null # null/int: Discards R1 reads shorter than this. Recommended to set at least to 1, to discard empty reads.
   min_length_r2: null # null/int: Discards R2 reads shorter than this. Recommended to set at least to 1, to discard empty reads.
   max_length_r1: null # null/int: Discards R1 reads longer than this value.
   max_length_r2: null # null/int: Discards R2 reads longer than this value.
   max_n_bases: null # null/int: Removes reads with more 'N' bases than the specified number.
-  max_expected_errors: null # null/int: Discard reads whose expected number of errors exceeds this value.
+  max_expected_errors: 5 # null/int: Discard reads whose expected number of errors exceeds this value.
+  max_average_error_rate: 0.8 # null/float: Discard reads whose average error rate exceeds this value. Between 0 and 1.
 
 reads__decontamination__kraken:
   kraken_dir: "path_to_kraken/k2_viral_20230314" # Directory containing kraken DB files. If does not exist, will be downloaded using the dirname.
@@ -67,6 +75,24 @@ reads__decontamination__bwa: # Relevant only if reads->decontamination is set to
 mapping__mapping__minimap2: # Relevant only if mapping->mapping is set to minimap2.
   preset: "splice" # enum: Mapping preset options. Allowed: 'sr', 'map-ont', 'map-hifi', 'map-pb', 'asm5', 'asm10', 'asm20', 'splice', 'splice:hq', 'splice:sr', 'ava-pb', 'ava-ont', 'lr:hq', 'map-iclr'.
 
+assembly__assembly__spades:
+  mode: "meta" # enum(standard): if true, kraken limits RAM memory usage but sacrifices speed Allowed: 'standard','meta','plasmid','metaplasmid','metaviral','bio','rna','rnaviral'.
+  careful: false # bool(false): When set to true, spades tries to reduce number of mismatches and short indels, but it has longer runtime.
+
+assembly__report__quast:
+  min_contig_length: 500 # Default: 500. Minimum length in bp for contigs to be taken into account.
+  extra: "" # Optional. Default: "". Provide directly arguments for quast. See https://quast.sourceforge.net/docs/manual.html
+
+assembly__classification__blast: # Optional section (set to [] or remove). Here provide multiple dicts, one for each reference.
+  # Use Blast DB tag, allowed: "18S_fungal_sequences" "Betacoronavirus" "ref_viroids_rep_genomes" "ref_viruses_rep_genomes" "refseq_select_rna" "refseq_select_prot" "refseq_protein" "refseq_rna" "16S_ribosomal_RNA" "ITS_RefSeq_Fungi" "28S_fungal_sequences" "ITS_eukaryote_sequences" "LSU_eukaryote_rRNA" "LSU_prokaryote_rRNA" "SSU_eukaryote_rRNA" "env_nt" "env_nr" "human_genome" "landmark" "mito" "mouse_genome" "nr" "nt_euk" "nt" "nt_others" "swissprot" "tsa_nr" "tsa_nt" "taxdb" "nt_prok" "nt_viruses" "pataa" "patnt" "pdbaa" "pdbnt" "ref_euk_rep_genomes" "ref_prok_rep_genomes".
+  db_dir: "/data/genome/blast/18S_fungal_sequences/23-12-12" # where the DB is located or where it will be downloaded.
+  query_vs_db: "nucleotide-nucleotide" # Type of query vs DB sequence (Searching nucleotide in nucleotide DB). Allowed: "nucleotide-nucleotide", "nucleotide-protein", "protein-protein", "protein-nucleotide".
+  max_number_of_hits: 5 # Maximum number of best hits when blast querying an input sequence (default: 5).
+  max_query_seqs: 2000 # Maximal number of contigs to report, ordered by their length (default: 2000).
+  max_target_seqs: 5 # Maximal number of homologues from reference genomes to report (default: 5).
+  min_query_coverage: 0.01 # Show only hits that have at least this proportion of contig mapped to reference (default: 0.01).
+  seqs_per_page: 100 # Number of table rows (sequences) per page (default: 100)
+
 ### RESOURCES #############################
 
 max_threads: 2
@@ -79,6 +105,8 @@ resources:
   mapping__indexing_mem_mb: 4096
   mapping__deduplication_mem_mb: 4096
   mapping__qualimap_mem_mb: 4096
+  assembly__assembly_mem_mb: 64000 # Memory in MB to reserve for assembly
+  assembly__classification_mem_mb: 32000 # int(32000): Memory in MB to reserve for classification.
 
 threads:
   reads__trimming: 4
@@ -87,6 +115,9 @@ threads:
   reads__decontamination: 8
   mapping__mapping: 2
   mapping__indexing: 2
+  assembly__assembly: 16 # Number of threads to use for assembly.
+  assembly__classification: 8 # int(8): Number of threads to use for classification.
+  assembly__report: 2 # int(2): Number of threads to use for reporting.
 
 module_versions:
-  reads: "v3.6.1"
+  reads: "v3.7.0"
