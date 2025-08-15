@@ -33,3 +33,6 @@ rule bwa__map:
         "logs/mapping/bwa/{reference}/{sample}.log",
     wrapper:
         "v7.2.0/bio/bwa/mem"
+
+
+ruleorder: bwa__map > samtools__bam_index
