@@ -14,7 +14,7 @@ mapping:
 
 assembly: # Uses processed reads. If no assembly method is specified, the step will not be performed.
   assembly: "spades" # enum: Assembly tool to use. Allowed: 'spades'.
-  report: ["quast", "bandage"] # list of enum([]): Reporting tool for assembly QC. Allowed: 'bandage','quast'.
+  report: ["quast"] # list of enum([]): Reporting tool for assembly QC. Allowed: 'bandage','quast'.
   classification: ["blast"] # list of enum([]): Classification method to use for contigs. Allowed: 'blast'.
 
 ### HYPERPARAMETERS #############################
