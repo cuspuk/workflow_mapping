@@ -30,6 +30,11 @@ if config["assembly"]["assembly"]:
 
     include: "rules/assembly/{tool}.smk".format(tool=config["assembly"]["assembly"])
 
+    for field in ["classification", "report"]:
+        for tool in config["assembly"][field]:
+
+            include: f"rules/{field}/{tool}.smk"
+
 
 if config["mapping"]["deduplication"]:
 

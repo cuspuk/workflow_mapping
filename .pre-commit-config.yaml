@@ -37,6 +37,8 @@ repos:
     rev: v2.2.6
     hooks:
       - id: codespell
+        args:
+          - "-L ot"
 
   - repo: https://github.com/snakemake/snakefmt
     rev: v0.10.0

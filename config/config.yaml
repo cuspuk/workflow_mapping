@@ -75,7 +75,7 @@ mapping__mapping__minimap2: # Relevant only if mapping->mapping is set to minima
   preset: TO_BE_DEFINED # enum: Mapping preset options. Allowed: 'sr', 'map-ont', 'map-hifi', 'map-pb', 'asm5', 'asm10', 'asm20', 'splice', 'splice:hq', 'splice:sr', 'ava-pb', 'ava-ont', 'lr:hq', 'map-iclr'.
 
 assembly__assembly__spades:
-  mode: "isolate" # enum(standard): Allowed: "isolate", "sc", "plasmid", "meta", "metaplasmid", "metaviral", "rna", "rnaviral", "bio", "corona", "sewage".
+  mode: "isolate" # enum(isolate): Allowed: "isolate", "sc", "plasmid", "meta", "metaplasmid", "metaviral", "rna", "rnaviral", "bio", "corona", "sewage".
   careful: false # bool(false): When set to true, spades tries to reduce number of mismatches and short indels, but it has longer runtime.
 
 assembly__report__quast:
@@ -103,6 +103,8 @@ resources:
   mapping__deduplication_mem_mb: 8192 # int(8192): Memory in MB to reserve for picard.
   mapping__qualimap_mem_mb: 4096 # int(4096): Memory in MB to reserve for qualimap.
   assembly__assembly_mem_mb: 64000 # int(64000): Memory in MB to reserve for assembly.
+  assembly__classification_mem_mb: 32000 # int(32000): Memory in MB to reserve for classification.
+
 threads:
   reads__trimming: 4 # int(4): Number of threads to use for trimming.
   reads__deduplication: 4 # int(4): Number of threads to use for deduplication.
@@ -111,6 +113,8 @@ threads:
   mapping__mapping: 4 # int(4): Number of threads to use for mapping.
   mapping__indexing: 2 # int(2): Number of threads to use for bam_index.
   assembly__assembly: 16 # int(16): Number of threads to use for assembly.
+  assembly__classification: 8 # int(8): Number of threads to use for classification.
+  assembly__report: 2 # int(2): Number of threads to use for reporting.
 
 module_versions:
   reads: "v3.7.0" # str(v3.7.0): Version of reads module.
