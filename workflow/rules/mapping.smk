@@ -8,7 +8,7 @@ rule samtools__index_reference:
     params:
         extra="",
     wrapper:
-        "v7.2.0/bio/samtools/faidx"
+        "v9.15.0/bio/samtools/faidx"
 
 
 rule picard__prepare_dict_index:
@@ -23,7 +23,7 @@ rule picard__prepare_dict_index:
     resources:
         mem_mb=get_mem_mb_for_deduplication,
     wrapper:
-        "v7.2.0/bio/picard/createsequencedictionary"
+        "v9.16.0/bio/picard/createsequencedictionary"
 
 
 rule samtools__bam_index:
@@ -39,7 +39,7 @@ rule samtools__bam_index:
     resources:
         mem_mb=get_mem_mb_for_indexing,
     wrapper:
-        "v7.2.0/bio/samtools/index"
+        "v9.14.0/bio/samtools/index"
 
 
 rule samtools__stats:
@@ -63,4 +63,4 @@ rule samtools__stats:
     log:
         "logs/mapping/samtools_stats/{reference}/{sample}_{bam_step}.log",
     wrapper:
-        "v7.2.0/bio/samtools/stats"
+        "v9.15.0/bio/samtools/stats"

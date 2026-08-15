@@ -23,7 +23,7 @@ rule hisat2_indexL:
         "{reference_dir}/hisat2_indexL/logs/{fasta}.log",
     threads: min(config["threads"]["mapping__mapping"], config["max_threads"])
     wrapper:
-        "v7.2.0/bio/hisat2/index"
+        "v9.16.0/bio/hisat2/index"
 
 
 rule hisat2_alignL:
@@ -44,7 +44,7 @@ rule hisat2_alignL:
     resources:
         mem_mb=get_mem_mb_for_mapping,
     wrapper:
-        "v7.2.0/bio/hisat2/align"
+        "v9.16.0/bio/hisat2/align"
 
 
 rule hisat2_samtools_sort:
@@ -60,4 +60,4 @@ rule hisat2_samtools_sort:
     resources:
         mem_mb=get_mem_mb_for_mapping,
     wrapper:
-        "v7.2.0/bio/samtools/sort"
+        "v9.15.0/bio/samtools/sort"

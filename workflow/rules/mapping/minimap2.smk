@@ -11,7 +11,7 @@ rule minimap2_index:
     wildcard_constraints:
         fasta="|".join(get_reference_names()),
     wrapper:
-        "v7.2.0/bio/minimap2/index"
+        "v9.9.0/bio/minimap2/index"
 
 
 rule minimap2_bam_sorted:
@@ -30,4 +30,4 @@ rule minimap2_bam_sorted:
     resources:
         mem_mb=get_mem_mb_for_mapping,
     wrapper:
-        "v7.2.0/bio/minimap2/aligner"
+        "v9.15.0/bio/minimap2/aligner"

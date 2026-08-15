@@ -11,4 +11,4 @@ rule picard__mark_duplicates:
     log:
         "logs/deduplication/picard/{reference}/{sample}.log",
     wrapper:
-        "v7.2.0/bio/picard/markduplicates"
+        "v9.16.0/bio/picard/markduplicates"
