@@ -12,7 +12,7 @@ rule samtools_sort_queryname:
     resources:
         mem_mb=get_mem_mb_for_deduplication,
     wrapper:
-        "v7.2.0/bio/samtools/sort"
+        "v9.15.0/bio/samtools/sort"
 
 
 rule samtools_fixmate:
@@ -28,7 +28,7 @@ rule samtools_fixmate:
     params:
         extra="-m",
     wrapper:
-        "v7.2.0/bio/samtools/fixmate/"
+        "v9.15.0/bio/samtools/fixmate/"
 
 
 rule samtools_sort_after_fixmate:
@@ -42,7 +42,7 @@ rule samtools_sort_after_fixmate:
     resources:
         mem_mb=get_mem_mb_for_deduplication,
     wrapper:
-        "v7.2.0/bio/samtools/sort"
+        "v9.15.0/bio/samtools/sort"
 
 
 rule samtools_markdup:
@@ -59,7 +59,7 @@ rule samtools_markdup:
     resources:
         mem_mb=get_mem_mb_for_deduplication,
     wrapper:
-        "v7.2.0/bio/samtools/markdup"
+        "v9.15.0/bio/samtools/markdup"
 
 
 rule samtools__bam_index_deduplication:
@@ -75,4 +75,4 @@ rule samtools__bam_index_deduplication:
     resources:
         mem_mb=get_mem_mb_for_indexing,
     wrapper:
-        "v7.2.0/bio/samtools/index"
+        "v9.14.0/bio/samtools/index"

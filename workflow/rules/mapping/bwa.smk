@@ -11,7 +11,7 @@ rule bwa__build_index:
     log:
         "{reference_dir}/bwa_index/logs/{fasta}.log",
     wrapper:
-        "v7.2.0/bio/bwa/index"
+        "v5.10.0/bio/bwa/index"
 
 
 rule bwa__map:
@@ -32,7 +32,7 @@ rule bwa__map:
     log:
         "logs/mapping/bwa/{reference}/{sample}.log",
     wrapper:
-        "v7.2.0/bio/bwa/mem"
+        "v9.16.0/bio/bwa/mem"
 
 
 ruleorder: bwa__map > samtools__bam_index
